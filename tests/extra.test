@@ -1,0 +1,30 @@
+# 
+# Copyright Jerily LTD. All Rights Reserved.
+# SPDX-FileCopyrightText: 2026 Neofytos Dimitriou (neo@jerily.cy)
+# SPDX-License-Identifier: MIT.
+# 
+
+package require tcltest 2
+namespace import ::tcltest::test
+lappend ::auto_path [file dirname [file dirname [file normalize [info script]]]]
+package require pure-tcl-aws-sqs
+set endpoint [lindex $argv 0]
+set argv {}
+set c [::aws::sqs::create [dict create region us-east-1 endpoint $endpoint aws_access_key_id test aws_secret_access_key test aws_session_token temporary-token]]
+test sqs-management {queue creation, pagination, attributes and visibility} -body {
+    set url [$c create_queue queue]
+    $c set_queue_attributes $url {VisibilityTimeout 60}
+    $c change_message_visibility $url receipt 30
+    set result [list [$c list_queues] [$c get_queue_attributes $url]]
+    $c delete_queue $url
+    set result
+} -result {{one two} {VisibilityTimeout 60}}
+test sqs-partial {batch errors do not appear as successful acknowledgements} -body {
+    catch {$c delete_message_batch queue-url {good bad}} msg opts
+    dict get $opts -errorcode
+} -result {AWS SQS BatchFailure}
+
+$c destroy
+set failed $::tcltest::numTests(Failed)
+::tcltest::cleanupTests
+exit [expr {$failed > 0}]
