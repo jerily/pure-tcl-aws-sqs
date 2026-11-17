@@ -80,5 +80,5 @@ proc ::aws::sqs::_delete_message_batch {client url receipts} {
 proc ::aws::sqs::_get_queue_attributes {client url} {
     get [call $client GetQueueAttributes [dict create QueueUrl [list S $url] AttributeNames [strings All]] 1] Attributes
 }
-package provide pure-tcl-aws-sqs 0.1.1
+package provide pure-tcl-aws-sqs 1.0.0
 package provide awssqs 1.0.19
