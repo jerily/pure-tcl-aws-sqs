@@ -4,7 +4,7 @@
 # SPDX-License-Identifier: MIT.
 # 
 
-package require pure-tcl-aws-core 0.1.0
+package require pure-tcl-aws-core 1.0.0
 namespace eval ::aws::sqs {namespace path ::aws::core}
 ::aws::core::register sqs {create_queue get_queue_url delete_queue list_queues send_message receive_messages set_queue_attributes change_message_visibility delete_message delete_message_batch get_queue_attributes}
 
@@ -80,5 +80,5 @@ proc ::aws::sqs::_delete_message_batch {client url receipts} {
 proc ::aws::sqs::_get_queue_attributes {client url} {
     get [call $client GetQueueAttributes [dict create QueueUrl [list S $url] AttributeNames [strings All]] 1] Attributes
 }
-package provide pure-tcl-aws-sqs 0.1.0
+package provide pure-tcl-aws-sqs 0.1.1
 package provide awssqs 1.0.19

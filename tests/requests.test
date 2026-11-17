@@ -9,7 +9,7 @@ namespace import ::tcltest::*
 lassign $argv library endpoint
 set argv {}
 lappend ::auto_path [file dirname [file dirname [info script]]]
-package require pure-tcl-aws-sqs 0.1.0
+package require pure-tcl-aws-sqs 0.1.1
 set client [::aws::sqs::create [dict create region us-east-1 endpoint $endpoint \
     aws_access_key_id test aws_secret_access_key test]]
 set face [encoding convertfrom utf-8 [binary format H* f09f9880]]
